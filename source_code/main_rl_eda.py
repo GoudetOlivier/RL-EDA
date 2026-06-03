@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser.add_argument('type_instance', type=int,  help='Type instance. Corresponding to K for NK landscape, or to the type of PUBOi distribution for QUBO instances')
     
     # General options
-    parser.add_argument('--type_strategy', type=str, default="PPO_EDA", help='type_strategy : PPO-EDA, UMDA, PBIL, ')
+    parser.add_argument('--type_strategy', type=str, default="RL_EDA", help='type_strategy : RL-EDA, UMDA, PBIL, ')
     parser.add_argument('--seed', type=int, default=0, help='random seed')
     parser.add_argument('--verbose', action='store_true')
     parser.add_argument('--device', type=str, default="cuda:0", help='device')
@@ -114,7 +114,7 @@ if __name__ == '__main__':
     nb_sampling_gibbs = args.nb_sampling_gibbs
 
 
-    typeStrategy = "PPO-EDA"
+    typeStrategy = "RL-EDA"
 
 
 

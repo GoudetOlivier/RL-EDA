@@ -314,13 +314,13 @@ class LinearCustom(torch.nn.Module):
 
 
 
-class PPO_EDA_generator(torch.nn.Module):
+class RL_EDA_generator(torch.nn.Module):
     """Ensemble of all the generators."""
 
 
     def __init__(self, data_shape, nh, size_pop,  skeleton=None, cat_sizes=None, linear=False, numberHiddenLayersG=1, device="cuda:0",modeCritic=False,shareParameters=False):
         """Init the model."""
-        super(PPO_EDA_generator, self).__init__()
+        super(RL_EDA_generator, self).__init__()
         layers = []
 
         self.sizes = cat_sizes

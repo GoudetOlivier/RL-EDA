@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch
 from eda_strategies.UMDA import UMDA
 from eda_strategies.PBIL import PBIL
-from eda_strategies.PPO_EDA import PPO_EDA
+from eda_strategies.RL_EDA import RL_EDA
 
 
 
@@ -19,8 +19,8 @@ class FactoryStrategyEA:
             return PBIL(N, lambda_, device)
 
 
-        elif (typeStrategy == "PPO-EDA"):
+        elif (typeStrategy == "RL-EDA"):
             
             print("OK")
 
-            return PPO_EDA(N,  lambda_, alpha, beta, device, typeModel,numberHiddenLayersG, nh, isUnivariate, dropoutGen, dropoutTrain, withoutCausalMaskTraining, dim_variables, learnDAG, noise_rescale, modeCritic, shareParameters, nb_train, coeff_dropout, mode_gibbs_sampling, nb_sampling_gibbs)
+            return RL_EDA(N,  lambda_, alpha, beta, device, typeModel,numberHiddenLayersG, nh, isUnivariate, dropoutGen, dropoutTrain, withoutCausalMaskTraining, dim_variables, learnDAG, noise_rescale, modeCritic, shareParameters, nb_train, coeff_dropout, mode_gibbs_sampling, nb_sampling_gibbs)

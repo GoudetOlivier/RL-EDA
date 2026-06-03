@@ -11,7 +11,7 @@ Other libraries are required such as Nevergrad (see https://facebookresearch.git
 
 An example of python command to run the (sigma,sigma)-RL-EDA version (reference version of the paper) with default hyperparameters for 10 QUBO instances  with n=128 and K=0 and 10 restarts for each instance (100 runs) on GPU device is :
 
-python main_ppo_eda.py QUBO 128 0 --verbose 
+python main_rl_eda.py QUBO 128 0 --verbose 
 
 
 ## Nevergrad competing algorithms

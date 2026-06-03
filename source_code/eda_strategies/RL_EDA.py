@@ -5,14 +5,14 @@ from eda_strategies.Abstract_EDA import Abstract_EDA
 import numpy as np
 from torch.distributions import kl_divergence
 
-from utils.ppo_eda_utils import PPO_EDA_generator, OrderGenerator, LearnedOrderGenerator, MatrixSampler
+from utils.rl_eda_utils import RL_EDA_generator, OrderGenerator, LearnedOrderGenerator, MatrixSampler
 
 from torch.distributions import Categorical
 
 import torch.nn.utils.prune as prune
 import copy
 
-class PPO_EDA(Abstract_EDA):
+class RL_EDA(Abstract_EDA):
 
     def __init__(self, N,  lambda_, alpha, beta,  device, typeModel, numberHiddenLayersG, nh, isUnivariate, dropoutGen, dropoutTrain, withoutCausalMaskTraining, dim_variables, learnDAG, noise_rescale, modeCritic, shareParameters, nb_train, coeff_dropout, mode_gibbs_sampling, nb_sampling_gibbs):
 
@@ -92,16 +92,16 @@ class PPO_EDA(Abstract_EDA):
         self.nb_instances = nb_instances
 
         if(self.typeModel == "Linear"):
-            self.generator = PPO_EDA_generator((self.nb_instances, self.lambda_, self.N), -1, self.lambda_,cat_sizes= self.dim_variables,  linear=True).to(self.device)
+            self.generator = RL_EDA_generator((self.nb_instances, self.lambda_, self.N), -1, self.lambda_,cat_sizes= self.dim_variables,  linear=True).to(self.device)
         elif(self.typeModel == "NeuralNet"):
-            self.generator = PPO_EDA_generator((self.nb_instances, self.lambda_, self.N), self.nh,self.lambda_,skeleton=None,cat_sizes= self.dim_variables,linear=False, numberHiddenLayersG=self.numberHiddenLayersG, device=self.device, shareParameters=self.shareParameters).to(self.device)
+            self.generator = RL_EDA_generator((self.nb_instances, self.lambda_, self.N), self.nh,self.lambda_,skeleton=None,cat_sizes= self.dim_variables,linear=False, numberHiddenLayersG=self.numberHiddenLayersG, device=self.device, shareParameters=self.shareParameters).to(self.device)
 
         self.generator.reset_parameters()
 
 
         if (self.modeCritic):
 
-            self.critic = PPO_EDA_generator((self.nb_instances, self.lambda_, self.N), self.nh,self.lambda_,skeleton=None,cat_sizes= self.dim_variables,linear=False, numberHiddenLayersG=self.numberHiddenLayersG, device=self.device, modeCritic=True, shareParameters=self.shareParameters).to(self.device)
+            self.critic = RL_EDA_generator((self.nb_instances, self.lambda_, self.N), self.nh,self.lambda_,skeleton=None,cat_sizes= self.dim_variables,linear=False, numberHiddenLayersG=self.numberHiddenLayersG, device=self.device, modeCritic=True, shareParameters=self.shareParameters).to(self.device)
             self.critic.reset_parameters()
 
         if(self.learnDAG):
@@ -269,7 +269,7 @@ class PPO_EDA(Abstract_EDA):
 
     def toString(self):
 
-        return "Strategy_PPO_EDA_"
+        return "Strategy_RL_EDA_"
 
 
 
