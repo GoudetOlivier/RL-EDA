@@ -22,7 +22,7 @@ parser.add_argument('name_algo', type=str, help='name Edas algo')
 parser.add_argument('type_problem', type=str, help='type_problem : QUBO, NK, NK3 or nasbench')
 parser.add_argument('dim', type=int, help='Taille de l\'instance')
 parser.add_argument('type_instance', type=int, help='Type instance. Corresponding to the K for NK landscape or to the type of distribution for PUBOi instances')
-parser.add_argument('--seed', type=int, default=0, help='Seed')
+parser.add_argument('--seed', type=int, default=1, help='Seed')
 parser.add_argument('--budget', type=int, default=10000, help='num function')
 parser.add_argument('--nb_instances', type=int, default=10, help="nb instances")
 parser.add_argument('--step_record', type=int, default=100, help="nb instances")
@@ -154,127 +154,7 @@ class EDASearchWrapper:
             
             
 
-            
-class TabuSearchAlgorithm:
-    def __init__(self, budget: int, categories, id : int):
-        self.budget = budget
-
-        self.best_fitness = float("-inf")
-
-        self.categories = categories
-
-        self.max_dim = np.max(categories)
-
-        self.id = id
-
-
-    def __call__(self,  problem, dim,  K, type_pb, f_logs, table_scores) -> None:
-
-
-        self.params1 = int(dim//10)
-        self.params2 = 10
-
-        current_indiv = np.zeros((dim), dtype=int)
-
-        for x in range(dim):
-            current_indiv[x] = random.randint(0,int(self.categories[x])-1)
-
-        if(type_pb == "NK" or type_pb == "NK3" or type_pb == "Bonnans"):
-            current_fitness = -problem.eval(current_indiv)
-        elif (type_pb == "QUBO"):
-            solution = 2 * current_indiv - 1
-            current_fitness = -problem.eval(solution)
-        elif (type_pb == "nasbench"):
-
-            solution = idx2one_hot(current_indiv, 3)
-            evals, info = problem(solution)
-            current_fitness = -evals[0]        
-
-        self.best_fitness = current_fitness
-
-        num_evals = 1
-
-        tabuTenure = np.zeros((dim))
-
-        iter_ = 0
-        
-        index = 0
-
-        while num_evals < self.budget:
-
-
-            best_delta = -float("inf")
-            best_x = -1
-            best_v = -1
-            trouve = 1
-
-            for x in range(dim):
-
-
-                for v in range(self.categories[x]):
-
-                    if(current_indiv[x] != v):
-
-                        new_indiv = np.copy(current_indiv)
-                        new_indiv[x] = v
-
-                        if (type_pb == "NK" or type_pb == "NK3" or type_pb == "Bonnans"):
-                            new_fitness = -problem.eval(new_indiv)
-                        elif(type_pb == "QUBO"):
-                            solution = 2*new_indiv - 1
-                            new_fitness = -problem.eval(solution)
-                        elif (type_pb == "nasbench"):
-                            solution = idx2one_hot(new_indiv, 3)
-                            evals, info = problem(solution)
-                            new_fitness = -evals[0]
-                            
-                        num_evals += 1
-
-                        delta = new_fitness - current_fitness
-
-                        if ((tabuTenure[x] <= iter_) or (new_fitness > self.best_fitness)):
-
-                            if (delta > best_delta):
-                                best_x = x
-                                best_v = v
-                                best_delta = delta
-                                trouve = 1
-
-                            elif (delta == best_delta):
-
-                                trouve += 1
-
-                                if (random.randint(1, trouve) == 1):
-                                    best_x = x
-                                    best_v = v
-
-                        if (new_fitness > self.best_fitness):
-                            self.best_fitness = new_fitness
-
-                        if(num_evals%100 == 0 and num_evals > 0):
-
-                            f_logs = open(path_logs + name_file_result, "a")
-                            f_logs.write(str(self.id) + "," + str(num_evals)  + "," + str(self.best_fitness) + "\n")
-                            f_logs.close()
-
-                            table_scores[index, self.id] = self.best_fitness
-
-                            index += 1
-
-                        if (num_evals >= self.budget):
-                            break
-                if (num_evals >= self.budget):
-                    break
-
-            current_fitness += best_delta
-
-            current_indiv[best_x] = best_v
-
-            tabuTenure[best_x] =  int(self.params1) + random.randint(0, int(self.params2))  + iter_
-
-            iter_ += 1
-
-
+       
   
 list_problem = []
 if(type_problem == "QUBO"):
@@ -315,13 +195,6 @@ elif(type_problem == "NK3"):
     print("categories")
     print(categories)
 
-
-elif (type_problem == "Bonnans"):
-
-    list_problem = getListInstance_Bonnans(nb_instances, dim)
-    
-    D = 2
-    categories = np.full((dim,), D)
 
 elif (type_problem == "nasbench"):
 
@@ -371,9 +244,6 @@ f_logs = open(path_logs + name_file_result, "w")
 f_logs.write("id,runtime,score" + "\n")
 f_logs.close()
 
-
-if (name_algo == "Tabu"):
-    list_algos = [TabuSearchAlgorithm(budget, categories, i) for i in range(nb_instances)]
 
 if (name_algo == "PBIL"):
     list_algos = [EDASearchWrapper(budget, pbil_builder, name_algo, categories, i) for i in range(nb_instances)]

@@ -101,9 +101,6 @@ elif (type_problem == "nasbench"):
     )
 
 
-    
-if(type_problem == "QUBO"):
-    type_problem = "UBQP"
 
 if not os.path.exists("results/results_nevergrad_final/" + name_algo ):
     os.mkdir("results/results_nevergrad_final/" + name_algo)
