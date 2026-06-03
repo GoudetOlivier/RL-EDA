@@ -21,15 +21,15 @@ To run a nervergrad algorithm such as DiscreteDE the command line is :
 python main_nevergrad.py DiscreteDE QUBO 128 0
 
 
-## Other EDAs and Tabu algorithms
-
-To run the Tabu algorithm on the same instance the command line is
-
-python main_baseline_edas_and_tabu.py Tabu QUBO 128 0
+## Other EDAs
 
 To run the PBIL algorithm on the same instance the command line is
 
-python main_baseline_edas_and_tabu.py PBIL QUBO 128 0
+python main_baseline_edas.py PBIL QUBO 128 0
+
+To run the MIMIC algorithm on the same instance the command line is
+
+python main_baseline_edas.py MIMIC QUBO 128 0
 
 
 ## Nasbench dataset
