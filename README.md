@@ -41,6 +41,13 @@ cd BB-DOB
 pip install -r requirements.txt
 pip install -e .
 
+Download nasbench data here : https://github.com/google-research/nasbench
+Install the library with the following lines :
+
+git clone https://github.com/google-research/nasbench
+cd nasbench
+pip install -e .
+
 ## Simplified and faster version of the algorithm
 
 A simplified and faster version of the algorithm that also scales better for large instances is available at 
@@ -49,9 +56,4 @@ https://github.com/GoudetOlivier/RL-EDA_simplified/
 
 
 
-Download nasbench data here : https://github.com/google-research/nasbench
-Install the library with the following lines :
 
-git clone https://github.com/google-research/nasbench
-cd nasbench
-pip install -e .
